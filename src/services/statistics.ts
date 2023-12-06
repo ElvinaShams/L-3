@@ -1,3 +1,4 @@
+import { genUUID } from '../utils/helpers';
 import { ProductData } from 'types';
 
 type eventSendType = {
@@ -11,7 +12,7 @@ enum EventType {
   ViewCard = 'viewCard',
   AddToCard = 'addToCard',
   Purchase = 'purchase',
-  ViewCardPromo = 'viewCardPromo'
+  ViewCardPromo = 'viewCardPromo',
 }
 
 class StatisticsService {
@@ -47,10 +48,19 @@ class StatisticsService {
   }
 
   async PurchaseEvent(products: ProductData[]) {
+    const timestamp = Math.floor(new Date().getTime() / 1000);
+    const totalPrice = products.reduce((arr, product) => (arr += product.salePriceU), 0);
+    const productIds = products.map((product) => product.id);
     const eventSend: eventSendType = {
-      type: EventType.AddToCard,
-      payload: products
+      type: EventType.Purchase,
+      payload: {
+        orderId: genUUID(),
+        totalPrice,
+        productIds
+      },
+      timestamp
     };
+
     this._sendStatistic(eventSend);
   }
 

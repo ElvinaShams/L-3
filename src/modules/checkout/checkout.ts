@@ -35,7 +35,8 @@ class Checkout extends Component {
       method: 'POST',
       body: JSON.stringify(this.products)
     });
-    await statisticsService.PurchaseEvent(this.products);
+    statisticsService.PurchaseEvent(this.products);
+    window.location.href = '/?isSuccessOrder';
   }
 }
 
