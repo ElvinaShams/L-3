@@ -17,31 +17,37 @@ enum EventType {
 
 class StatisticsService {
   async routeEvent(url: string) {
+    const timestamp = Math.floor(new Date().getTime() / 1000);
     const eventSend: eventSendType = {
       type: EventType.Route,
-      payload: { url }
+      payload: { url },
+      timestamp
     };
 
     this._sendStatistic(eventSend);
   }
 
   async viewCardEvent(product: ProductData, secretKey: string) {
+    const timestamp = Math.floor(new Date().getTime() / 1000);
     const eventSend: eventSendType = {
       type: Object.entries(product.log).length === 0 ? EventType.ViewCard : EventType.ViewCardPromo,
       payload: {
         ...product,
         secretKey
-      }
+      },
+      timestamp
     };
     this._sendStatistic(eventSend);
   }
 
   async addtoCardEvent(product: ProductData) {
+    const timestamp = Math.floor(new Date().getTime() / 1000);
     const eventSend: eventSendType = {
       type: EventType.AddToCard,
       payload: {
         ...product
-      }
+      },
+      timestamp
     };
 
     this._sendStatistic(eventSend);
